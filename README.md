@@ -1,5 +1,5 @@
-# apis-rest-node-ts-model
+# # Node.js y Express.js con TypeScript
 
-# Description
+# Descripción
 
-## Modelo de datos de una aplicación Node.js con TypeScript y Express.js.
+## Modelos de datos de aplicaciones en Node.js con TypeScript y Express.js.
