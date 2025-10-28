@@ -1,9 +1,8 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
+import controller from "../controllers/main.controller";
 
 const router = Router();
 
-router.get("/", (_req: Request, res: Response) => {
-  res.json("Hola en Node y Typescript!!!");
-});
+router.get("/", controller.indexMain);
 
 export default router;
