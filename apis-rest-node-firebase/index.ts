@@ -4,11 +4,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 // rutas import
-import mainRouter from "./src/routes/main.router";
-import productsRouter from "./src/routes/products.router";
+import mainRouter from "./src/routes/main.router.js";
+import productsRouter from "./src/routes/products.router.js";
 
 // middlewares import
-import middlewares from "./src/middlewares/not-found";
+import middlewares from "./src/middlewares/not-found.js";
 
 dotenv.config();
 

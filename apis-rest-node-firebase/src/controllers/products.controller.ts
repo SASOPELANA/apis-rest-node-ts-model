@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import listaProductos from "../types/types.products";
+import listaProductos from "../types/types.products.js";
 
 // get all
 const getAll = (req: Request, res: Response) => {
