@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import listaProductos from "../types/types.products.js";
+import Model from "../model/products.model.js";
 
 // get all
-const getAll = (req: Request, res: Response) => {
+const getAll = async (req: Request, res: Response) => {
   const categories = req.query.categories as string;
+
+  const listaProductos = await Model.getAllProducts();
 
   if (categories) {
     const productsFiltered = listaProductos.filter((item) =>
@@ -17,6 +19,7 @@ const getAll = (req: Request, res: Response) => {
 };
 
 // get search --> buscador dinamico
+/*
 const getSearch = (req: Request, res: Response) => {
   const name: string = req.query.name as string;
 
@@ -34,12 +37,13 @@ const getSearch = (req: Request, res: Response) => {
 
   res.json(productsFiltered);
 };
+*/
 
 // get id
-const getId = (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+const getId = async (req: Request, res: Response) => {
+  const id = req.params.id;
 
-  const response = listaProductos.find((item) => item.id === id);
+  const response = await Model.getProductById(id);
 
   if (!response) {
     return res.status(404).json({ error: "No existe el producto." });
@@ -51,7 +55,7 @@ const getId = (req: Request, res: Response) => {
 // creamos un objeto para los endpoints
 const productsController = {
   getAll,
-  getSearch,
+  //getSearch,
   getId,
 };
 

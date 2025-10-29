@@ -8,7 +8,7 @@ const router = Router();
 router.get("/products", controller.getAll);
 
 // buscador dinamico o genéricas
-router.get("/products/search", controller.getSearch);
+//router.get("/products/search", controller.getSearch);
 
 // get id
 router.get("/products/:id", controller.getId);
