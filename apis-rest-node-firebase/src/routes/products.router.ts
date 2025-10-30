@@ -13,4 +13,7 @@ router.get("/products", controller.getAll);
 // get id
 router.get("/products/:id", controller.getId);
 
+// post --> create new product
+router.post("/products", controller.createProduct);
+
 export default router;

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Model from "../model/products.model.js";
+import { Productos } from "../types/types.products.js";
 
 // get all
 const getAll = async (req: Request, res: Response) => {
@@ -52,11 +53,25 @@ const getId = async (req: Request, res: Response) => {
   res.json(response);
 };
 
+// post --> crea un producto
+const createProduct = async (req: Request, res: Response) => {
+  const { name, price, description, categories, image } = req.body as Productos;
+  const response = await Model.createProduct({
+    name,
+    price,
+    description,
+    categories,
+    image,
+  });
+  res.status(201).json(response);
+};
+
 // creamos un objeto para los endpoints
 const productsController = {
   getAll,
   //getSearch,
   getId,
+  createProduct,
 };
 
 export default productsController;

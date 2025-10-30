@@ -1,5 +1,5 @@
 import { db } from "./firebase.js";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, addDoc } from "firebase/firestore";
 import { Productos } from "../types/types.products.js";
 
 const productsCollection = collection(db, "products");
@@ -35,9 +35,21 @@ const getProductById = async (id: string): Promise<Productos | null> => {
 
 // get search
 
+// post --> create new product
+const createProduct = async (data: any): Promise<Productos | null> => {
+  try {
+    const docRef = await addDoc(productsCollection, data);
+    return { id: docRef.id, ...data };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const metodosAll = {
   getAllProducts,
   getProductById,
+  createProduct,
 };
 
 export default metodosAll;
