@@ -1,20 +1,20 @@
 # APIS REST con Node, Typescript y Firebase
 
-## Descripcion
+## Descripción
 
-Apis Rest para gestion de productos desarrolado con Node.js y Express.
+Apis Rest para gestión de productos desarrollado con Node.js y Express.
 
-## Instalacion
+## Instalación
 
 1. Clonar el repositorio.
 
-2. Instalar dependecias.
+2. Instalar dependencias.
 
 ```shell
 pnpm install
 ```
 
-3. Configurar varaibles de entorno:
+3. Configurar variables de entorno:
 
 ```shell
 # Copiar el archivo de ejemplo y completar los datos requeridos.
@@ -29,12 +29,12 @@ Luego editar el archivo `.env` con los valores correspondientes para tu entorno.
 pnpm run dev
 ```
 
-## Documentacion de la API
+## Documentación de la API
 
 ### Obtener todos los productos
 
 - **GET** `/api/products`
-- **Descripcion:** Devuelve una lista de todos los productos.
+- **Descripción:** Devuelve una lista de todos los productos.
 - **Respuesta de ejemplo:**
 
 ```json
@@ -69,8 +69,8 @@ pnpm run dev
 ### Buscar productos por nombre
 
 - **GET** `/api/products/search?name=palabra`
-- **Descripcion:** Devuelve los productos cuyo nombre contiene la palabra indicada.
-- **Parametros:**
+- **Descripción:** Devuelve los productos cuyo nombre contiene la palabra indicada.
+- **Parámetros:**
   - `name` (query, requerido): texto a buscar en el nombre del producto.
 - **Ejemplo de uso:** `/api/products/search?name=memoria`
 - **Respuesta de ejemplo:**
@@ -91,8 +91,8 @@ pnpm run dev
 ### Obtener producto por ID
 
 - **GET** `api/products/:id`
-- **Descripcion:** Devuelve un producto especifico por su ID.
-- **Parámatros:**
+- **Descripción:** Devuelve un producto especifico por su ID.
+- **Parámetros:**
   - `id` (path, requerido): ID del producto.
 - **Ejemplo de uso:** `api/products/rAEhiWvFpz8jFDTR9IaP`
 - **Respuesta ejemplo:**
