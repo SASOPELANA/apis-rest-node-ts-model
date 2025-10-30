@@ -4,6 +4,7 @@ import { Productos } from "../types/types.products.js";
 
 const productsCollection = collection(db, "products");
 
+// get all
 const getAllProducts = async (): Promise<Productos[]> => {
   try {
     const snapshot = await getDocs(productsCollection);
@@ -13,26 +14,26 @@ const getAllProducts = async (): Promise<Productos[]> => {
       ...doc.data(),
     })) as Productos[];
   } catch (error) {
-    console.log(error);
-    return [];
+    console.error(error);
+    throw error;
   }
 };
 
+// get id
 const getProductById = async (id: string): Promise<Productos | null> => {
   try {
-    const docRef = doc(db, "products", id); // referencia al documento
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as Productos;
-    } else {
-      return null;
-    }
+    const producRef = doc(productsCollection, id);
+    const snapshot = await getDoc(producRef);
+    return snapshot.exists()
+      ? ({ id: snapshot.id, ...snapshot.data() } as Productos)
+      : null;
   } catch (error) {
-    console.log(error);
-    return null;
+    console.error(`Error al obtener el producto ID ${id}:`, error);
+    throw error;
   }
 };
+
+// get search
 
 const metodosAll = {
   getAllProducts,

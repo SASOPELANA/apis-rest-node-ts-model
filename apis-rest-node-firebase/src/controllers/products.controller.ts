@@ -5,17 +5,17 @@ import Model from "../model/products.model.js";
 const getAll = async (req: Request, res: Response) => {
   const categories = req.query.categories as string;
 
-  const listaProductos = await Model.getAllProducts();
+  const response = await Model.getAllProducts();
 
   if (categories) {
-    const productsFiltered = listaProductos.filter((item) =>
+    const productsFiltered = response.filter((item) =>
       item.categories.includes(categories),
     );
 
     // nunca se deja dos res en un metodo. si incluye dos o mas se usa return
     return res.json(productsFiltered);
   }
-  res.json(listaProductos);
+  res.json(response);
 };
 
 // get search --> buscador dinamico
@@ -27,7 +27,7 @@ const getSearch = (req: Request, res: Response) => {
     return res.status(400).json({ error: "El nombre es requerido" });
   }
 
-  const productsFiltered = listaProductos.filter((item) =>
+  const productsFiltered = response.filter((item) =>
     item.name.toLowerCase().includes(name.toLowerCase()),
   );
 
