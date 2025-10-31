@@ -145,6 +145,76 @@ pnpm run dev
     },
 ```
 
+### Actualizar un producto
+
+- **PUT** `/api/products/:id`
+- **Descripción:** Actualiza todos los campos de un producto.
+- **Parámetros:**
+  - `id` (path, requerido): ID del producto a actualizar.
+- **Ejemplo de uso:** `api/products/rAEhiWvFpz8jFDTR9IaP`
+- **Body (JSON):**
+
+```json
+{
+    "categories": [
+        "GPU",
+        "Gama Alta"
+    ],
+    "description": "Tarjeta gráfica actualizada",
+    "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
+    "name": "NVIDIA RTX 4090",
+    "price": 1500
+}
+```
+
+- **Repuesta Ejemplo:**
+
+```json
+{
+    "categories": [
+        "GPU",
+        "Gama Alta"
+    ],
+    "description": "Tarjeta gráfica actualizada",
+    "id": "rAEhiWvFpz8jFDTR9IaP",
+    "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
+    "name": "NVIDIA RTX 4090",
+    "price": 1500
+}
+```
+
+### Actualizar un producto parcialmente
+
+- **PATCH** `/api/products/:id`
+- **Descripción:** Actualiza solo los campos proporcionados de un producto.
+- **Parámetros:**
+  - `id` (path, requerido): ID del producto a actualizar.
+- **Ejemplo de uso:** `/api/products/rAEhiWvFpz8jFDTR9IaP`
+- **Body (JSON):** Solo incluir los campos que quieres actualizar
+
+```json
+{
+    "price": 1400,
+    "description": "Tarjeta gráfica en oferta"
+}
+```
+
+- **Respuesta ejemplo:**
+
+```json
+{
+    "categories": [
+        "GPU",
+        "Gama Alta"
+    ],
+    "description": "Tarjeta gráfica en oferta",
+    "id": "rAEhiWvFpz8jFDTR9IaP",
+    "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
+    "name": "NVIDIA RTX 4090",
+    "price": 1400
+}
+```
+
 ### Eliminar un producto
 
 - **DELETE** `/api/products/:id`

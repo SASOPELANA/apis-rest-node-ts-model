@@ -196,22 +196,50 @@ const updatePatchProduct = async (req: Request, res: Response) => {
   const data = {} as Productos;
 
   if (req.body.name !== undefined) {
+    if (req.body.name.trim().length === 0) {
+      return res.status(400).json({ error: "El nombre no puede estar vacío" });
+    }
+
     data.name = req.body.name;
   }
 
   if (req.body.price !== undefined) {
+    if (req.body.price <= 0) {
+      return res.status(400).json({ error: "El precio debe ser mayor a 0" });
+    }
+
     data.price = req.body.price;
   }
 
   if (req.body.categories !== undefined) {
+    if (req.body.categories.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "Las categorías deben tener al menos una categoría." });
+    }
+
     data.categories = req.body.categories;
   }
 
   if (req.body.description !== undefined) {
+    if (req.body.description.trim().length === 0) {
+      return res
+        .status(400)
+        .json({ error: "La descripcion no puede estar vacía" });
+    }
+
     data.description = req.body.description;
   }
 
   if (req.body.image !== undefined) {
+    if (req.body.image.trim().length === 0) {
+      return res
+        .status(400)
+        .json({
+          error: "La URL de la imagen debe ser un texto y no estar vacia.",
+        });
+    }
+
     data.image = req.body.image;
   }
 
