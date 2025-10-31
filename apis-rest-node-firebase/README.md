@@ -110,3 +110,37 @@ pnpm run dev
 ]
 ```
 
+### Crear un producto
+
+- **POST** `api/products`
+- **Descripcion:** Crea un producto nuevo.
+- **Body (JSON):**
+
+```json
+{
+        "categories": [
+            "CPU",
+            "Gama Media"
+        ],
+        "description": "CPU",
+        "image": "https://rec-line.com/img/productos/800x800/bx8071514400_2.jpeg",
+        "name": "Intel I5 14400k",
+        "price": 130
+    },
+```
+
+- **Respuesta ejemplo:**
+
+```json
+{
+        "categories": [
+            "CPU",
+            "Gama Media"
+        ],
+        "description": "CPU",
+        "id": "rAEhiWvFpz8jFDTR9IaP",
+        "image": "https://rec-line.com/img/productos/800x800/bx8071514400_2.jpeg",
+        "name": "Intel I5 14400k",
+        "price": 130
+    },
+```
