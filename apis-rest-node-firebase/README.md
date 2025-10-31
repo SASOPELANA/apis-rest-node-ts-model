@@ -113,7 +113,7 @@ pnpm run dev
 ### Crear un producto
 
 - **POST** `api/products`
-- **Descripcion:** Crea un producto nuevo.
+- **Descripción:** Crea un producto nuevo.
 - **Body (JSON):**
 
 ```json
@@ -144,3 +144,11 @@ pnpm run dev
         "price": 130
     },
 ```
+
+### Eliminar un producto
+
+- **DELETE** `/api/products/:id`
+- **Descripción:** Elimina un producto por su ID.
+- **Parámetros:**
+  - `id` (path, requerido): ID del producto a eliminar
+- **Respuesta:** 204 No Content

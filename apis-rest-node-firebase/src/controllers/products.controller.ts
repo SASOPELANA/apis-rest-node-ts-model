@@ -66,12 +66,26 @@ const createProduct = async (req: Request, res: Response) => {
   res.status(201).json(response);
 };
 
+// delete --> borra un producto
+const deleteProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const response = await Model.deleteProduct(id);
+
+  if (!response) {
+    return res.status(404).json({ error: "No existe el producto." });
+  }
+
+  res.status(204).json(response);
+};
+
 // creamos un objeto para los endpoints
 const productsController = {
   getAll,
   //getSearch,
   getId,
   createProduct,
+  deleteProduct,
 };
 
 export default productsController;

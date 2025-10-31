@@ -1,5 +1,12 @@
 import { db } from "./firebase.js";
-import { collection, getDocs, doc, getDoc, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { Productos } from "../types/types.products.js";
 
 const productsCollection = collection(db, "products");
@@ -46,10 +53,29 @@ const createProduct = async (data: any): Promise<Productos | null> => {
   }
 };
 
+// delete --> delete product
+const deleteProduct = async (id: string): Promise<boolean> => {
+  try {
+    const productRef = doc(productsCollection, id);
+    const snapshot = await getDoc(productRef);
+
+    if (!snapshot.exists()) {
+      return false;
+    }
+
+    await deleteDoc(productRef);
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const metodosAll = {
   getAllProducts,
   getProductById,
   createProduct,
+  deleteProduct,
 };
 
 export default metodosAll;

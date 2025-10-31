@@ -16,4 +16,7 @@ router.get("/products/:id", controller.getId);
 // post --> create new product
 router.post("/products", controller.createProduct);
 
+// delete --> delete product
+router.delete("/products/:id", controller.deleteProduct);
+
 export default router;
