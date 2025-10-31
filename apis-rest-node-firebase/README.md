@@ -14,7 +14,7 @@ Apis Rest para gestión de productos desarrollado con Node.js y Express.
 pnpm install
 ```
 
-3. Configurar variables de entorno:
+3.Configurar variables de entorno:
 
 ```shell
 # Copiar el archivo de ejemplo y completar los datos requeridos.
@@ -23,7 +23,7 @@ cp example.env .env
 
 Luego editar el archivo `.env` con los valores correspondientes para tu entorno.
 
-4. Ejecutar en modo desarrollo.
+4.Ejecutar en modo desarrollo.
 
 ```shell
 pnpm run dev
@@ -151,4 +151,5 @@ pnpm run dev
 - **Descripción:** Elimina un producto por su ID.
 - **Parámetros:**
   - `id` (path, requerido): ID del producto a eliminar
+- **Ejemplo de uso:** `api/products/CKeiE71F2Yj9HIkQD3jh`
 - **Respuesta:** 204 No Content

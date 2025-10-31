@@ -56,6 +56,63 @@ const getId = async (req: Request, res: Response) => {
 // post --> crea un producto
 const createProduct = async (req: Request, res: Response) => {
   const { name, price, description, categories, image } = req.body as Productos;
+
+  // validación
+  // 1. validamos nombre | debe ser texto
+  if (!name) {
+    return res.status(400).json({ error: "El nombre es requerido" });
+  }
+
+  if (typeof name !== "string") {
+    return res.status(400).json({ error: "El nombre debe ser texto" });
+  }
+
+  // 2. Validarnos precio | debe ser un number | debe ser mayor a 0
+  if (!price) {
+    return res.status(400).json({ error: "El precio es requerido" });
+  }
+
+  if (typeof price !== "number") {
+    return res.status(400).json({ error: "El precio debe ser un número" });
+  }
+
+  if (price <= 0) {
+    return res.status(400).json({ error: "El precio debe ser mayor a 0" });
+  }
+
+  // 3. Validamos categorías | debe ser un array | debe tener al menos una categoría
+  if (!categories) {
+    return res.status(400).json({ error: "Las categorías son requeridas" });
+  }
+
+  if (!Array.isArray(categories)) {
+    return res
+      .status(400)
+      .json({ error: "Las categorías deben ser una lista." });
+  }
+
+  if (categories.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Las categorías deben tener al menos una categoría." });
+  }
+
+  // 4. Validamos imagen | debe ser un string
+  if (!image) {
+    return res.status(400).json({ error: "La imagen es requerida" });
+  }
+
+  if (typeof image !== "string") {
+    return res
+      .status(400)
+      .json({ error: "La URL de la imagen debe ser un texto." });
+  }
+
+  // 5. Validamos la descripcion | debe ser un string (opcional)
+  if (description && typeof description !== "string") {
+    return res.status(400).json({ error: "La descripcion debe ser un texto." });
+  }
+
   const response = await Model.createProduct({
     name,
     price,
