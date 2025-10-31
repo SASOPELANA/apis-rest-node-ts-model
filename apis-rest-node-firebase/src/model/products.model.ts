@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   addDoc,
+  setDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { Productos } from "../types/types.products.js";
@@ -53,6 +54,53 @@ const createProduct = async (data: any): Promise<Productos | null> => {
   }
 };
 
+// put --> update producto
+const updateProduct = async (
+  id: string,
+  productData: Omit<Productos, "id">, // --> Omit --> exluye el id
+) => {
+  try {
+    const productRef = doc(productsCollection, id);
+    const snapshot = await getDoc(productRef);
+
+    if (!snapshot.exists()) {
+      return false;
+    }
+
+    await setDoc(productRef, productData);
+
+    return { id, ...productData };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// patch --> actualiza un producto
+const updatePatchProduct = async (
+  id: string,
+  productData: Omit<Productos, "id">,
+) => {
+  try {
+    const productRef = doc(productsCollection, id);
+    const snapshot = await getDoc(productRef);
+
+    if (!snapshot.exists()) {
+      return false;
+    }
+
+    await setDoc(productRef, productData, { merge: true });
+
+    // otro metodo. import { updateDoc } de "firebase/firestore";
+    // await updateDoc(productRef, productData);
+
+    return { id, ...productData };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 // delete --> delete product
 const deleteProduct = async (id: string): Promise<boolean> => {
   try {
@@ -76,6 +124,8 @@ const metodosAll = {
   getProductById,
   createProduct,
   deleteProduct,
+  updateProduct,
+  updatePatchProduct,
 };
 
 export default metodosAll;

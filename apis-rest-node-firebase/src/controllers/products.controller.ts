@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Model from "../model/products.model.js";
 import { Productos } from "../types/types.products.js";
+import { error } from "console";
 
 // get all
 const getAll = async (req: Request, res: Response) => {
@@ -56,6 +57,13 @@ const getId = async (req: Request, res: Response) => {
 // post --> crea un producto
 const createProduct = async (req: Request, res: Response) => {
   const { name, price, description, categories, image } = req.body as Productos;
+
+  if (!name || !price || !description || !categories || !image) {
+    return res.status(422).json({
+      error:
+        "Nombre, precio, categorías, descripcion y la imagen son requeridas.",
+    });
+  }
 
   // validación
   // 1. validamos nombre | debe ser texto
@@ -123,6 +131,106 @@ const createProduct = async (req: Request, res: Response) => {
   res.status(201).json(response);
 };
 
+// put --> update product
+const updateProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const { name, price, categories, description, image } = req.body as Productos;
+
+  if (!name || !price || !categories || !description || !image) {
+    return res.status(422).json({
+      error:
+        "Nombre, precio, categorías, descripcion y la imagen son requeridas.",
+    });
+  }
+
+  if (typeof name !== "string") {
+    return res.status(400).json({ error: "El nombre debe ser texto" });
+  }
+
+  if (typeof price !== "number") {
+    return res.status(400).json({ error: "El precio debe ser un número" });
+  }
+
+  if (price <= 0) {
+    return res.status(400).json({ error: "El precio debe ser mayor a 0" });
+  }
+
+  if (!Array.isArray(categories)) {
+    return res
+      .status(400)
+      .json({ error: "Las categorías deben ser una lista." });
+  }
+
+  if (categories.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Las categorías deben tener al menos una categoría." });
+  }
+
+  if (typeof image !== "string") {
+    return res
+      .status(400)
+      .json({ error: "La URL de la imagen debe ser un texto." });
+  }
+
+  const response = await Model.updateProduct(id, {
+    name,
+    price,
+    categories,
+    description,
+    image,
+  });
+
+  if (!response) {
+    return res.status(404).json({ error: "No existe el producto." });
+  }
+
+  res.json(response);
+};
+
+// patch --> actualiza un producto
+const updatePatchProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const data = {} as Productos;
+
+  if (req.body.name !== undefined) {
+    data.name = req.body.name;
+  }
+
+  if (req.body.price !== undefined) {
+    data.price = req.body.price;
+  }
+
+  if (req.body.categories !== undefined) {
+    data.categories = req.body.categories;
+  }
+
+  if (req.body.description !== undefined) {
+    data.description = req.body.description;
+  }
+
+  if (req.body.image !== undefined) {
+    data.image = req.body.image;
+  }
+
+  if (Object.keys(data).length === 0) {
+    return res.status(422).json({
+      error:
+        "No se proporcionaron datos para actualizar. Por favor, proporciona al menos un campo para actualizar.",
+    });
+  }
+
+  const response = await Model.updatePatchProduct(id, data);
+
+  if (!response) {
+    return res.status(404).json({ error: "No existe el producto." });
+  }
+
+  res.json(response);
+};
+
 // delete --> borra un producto
 const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -142,6 +250,8 @@ const productsController = {
   //getSearch,
   getId,
   createProduct,
+  updateProduct,
+  updatePatchProduct,
   deleteProduct,
 };
 
