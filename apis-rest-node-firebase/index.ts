@@ -12,12 +12,17 @@ import productsRouter from "./src/routes/products.router.js";
 // middlewares import
 import middlewares from "./src/middlewares/not-found.js";
 
+// auth router import
+import authRouter from "./src/routes/auth.router.js";
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/auth", authRouter);
 
 app.use(mainRouter);
 app.use("/api", productsRouter);
