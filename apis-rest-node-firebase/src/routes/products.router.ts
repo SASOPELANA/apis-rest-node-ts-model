@@ -2,6 +2,8 @@ import { Router } from "express";
 
 import controller from "../controllers/products.controller.js";
 
+import { verifyToken } from "../middlewares/verify-token.js";
+
 const router = Router();
 
 // get all
@@ -14,7 +16,8 @@ router.get("/products", controller.getAll);
 router.get("/products/:id", controller.getId);
 
 // post --> create new product
-router.post("/products", controller.createProduct);
+// middlewares --> verifyToken --> para proteger la ruta
+router.post("/products", verifyToken, controller.createProduct);
 
 // put --> update product
 router.put("/products/:id", controller.updateProduct);
