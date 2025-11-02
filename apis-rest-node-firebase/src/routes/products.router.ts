@@ -6,11 +6,11 @@ import { verifyToken } from "../middlewares/verify-token.js";
 
 const router = Router();
 
-// get all
+// get all products and By categories
 router.get("/products", controller.getAll);
 
-// buscador dinamico o genéricas
-//router.get("/products/search", controller.getSearch);
+// buscador dinamico o genéricas de nombre
+router.get("/products/search", controller.getSearchByName);
 
 // get id
 router.get("/products/:id", controller.getId);

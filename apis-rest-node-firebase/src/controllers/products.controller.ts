@@ -3,18 +3,21 @@ import Model from "../model/products.model.js";
 import { Productos } from "../types/types.products.js";
 
 // get all
+
 const getAll = async (req: Request, res: Response) => {
   const categories = req.query.categories as string[];
 
   if (categories) {
-    const productsByCategory = await Model.getProductsByCategory(categories);
+    let productsByCategory = await Model.getProductsByCategory(categories);
 
     //console.log(productsByCategory.length);
 
     if (productsByCategory.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No se encontraron productos con esa categoría." });
+      productsByCategory = await Model.getProductsByCategoryLower(categories);
+
+      if (productsByCategory.length === 0) {
+        return res.status(404).json({ error: "No se encontraron productos." });
+      }
     }
 
     // nunca se deja dos res en un metodo. si incluye dos o mas se usa return
@@ -24,26 +27,27 @@ const getAll = async (req: Request, res: Response) => {
   res.json(response);
 };
 
-// get search --> buscador dinamico
-/*
-const getSearch = (req: Request, res: Response) => {
-  const name: string = req.query.name as string;
+// get search --> buscador dinamico por nombre
+
+const getSearchByName = async (req: Request, res: Response) => {
+  let name = req.query.name as string;
 
   if (!name) {
     return res.status(400).json({ error: "El nombre es requerido" });
   }
 
-  const productsByCategory= response.filter((item) =>
-    item.name.toLowerCase().includes(name.toLowerCase()),
-  );
+  let response = await Model.getProductByName(name);
 
-  if (productsFiltered.length === 0) {
-    return res.status(404).json({ error: "No se encontro el producto." });
+  if (response.length === 0) {
+    response = await Model.getProductByNameLower(name.toLowerCase());
+
+    if (response.length === 0) {
+      return res.status(404).json({ error: "No se encontraron productos." });
+    }
   }
 
-  res.json(productsFiltered);
+  res.json(response);
 };
-*/
 
 // get id
 const getId = async (req: Request, res: Response) => {
@@ -127,9 +131,12 @@ const createProduct = async (req: Request, res: Response) => {
 
   const response = await Model.createProduct({
     name,
+    name_lower: name.toLowerCase(),
     price,
     description,
+    description_lower: description?.toLowerCase(),
     categories,
+    categories_lower: categories.map((item) => item.toLowerCase()),
     image,
   });
   res.status(201).json(response);
@@ -180,9 +187,12 @@ const updateProduct = async (req: Request, res: Response) => {
 
   const response = await Model.updateProduct(id, {
     name,
+    name_lower: name.toLowerCase(),
     price,
     categories,
+    categories_lower: categories.map((item) => item.toLowerCase()),
     description,
+    description_lower: description?.toLowerCase(),
     image,
   });
 
@@ -205,6 +215,7 @@ const updatePatchProduct = async (req: Request, res: Response) => {
     }
 
     data.name = req.body.name;
+    data.name_lower = req.body.name.toLowerCase();
   }
 
   if (req.body.price !== undefined) {
@@ -223,6 +234,9 @@ const updatePatchProduct = async (req: Request, res: Response) => {
     }
 
     data.categories = req.body.categories;
+    data.categories_lower = req.body.categories.map((item: string) =>
+      item.toLowerCase(),
+    );
   }
 
   if (req.body.description !== undefined) {
@@ -233,6 +247,7 @@ const updatePatchProduct = async (req: Request, res: Response) => {
     }
 
     data.description = req.body.description;
+    data.description_lower = req.body.description.toLowerCase();
   }
 
   if (req.body.image !== undefined) {
@@ -277,7 +292,7 @@ const deleteProduct = async (req: Request, res: Response) => {
 // creamos un objeto para los endpoints
 const productsController = {
   getAll,
-  //getSearch,
+  getSearchByName,
   getId,
   createProduct,
   updateProduct,

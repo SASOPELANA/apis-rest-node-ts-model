@@ -4,34 +4,126 @@
 
 Apis Rest para gestión de productos desarrollado con Node.js y Express.
 
+## Pre requisitos
+
+- Node.js (v18 o superior)
+- pnpm
+
 ## Instalación
 
 1. Clonar el repositorio.
 
-2. Instalar dependencias.
+2. Instalar pnpm si no lo tienes instalado.
+
+```shell
+npm install -g pnpm
+```
+
+3. Instalar dependencias.
 
 ```shell
 pnpm install
 ```
 
-3.Configurar variables de entorno:
+4. Configurar variables de entorno:
+
+Copia el archivo `example.env` y renombrado a `.env`. Luego, completa los valores requeridos.
 
 ```shell
-# Copiar el archivo de ejemplo y completar los datos requeridos.
 cp example.env .env
 ```
 
-Luego editar el archivo `.env` con los valores correspondientes para tu entorno.
+Las variables de entorno son las siguientes:
 
-4.Ejecutar en modo desarrollo.
+- `PORT`: Puerto en el que correrá el servidor.
+- `FIREBASE_API_KEY`: Tu clave de API de Firebase.
+- `FIREBASE_AUTH_DOMAIN`: Tu dominio de autenticación de Firebase.
+- `FIREBASE_PROJECT_ID`: Tu ID de proyecto de Firebase.
+- `FIREBASE_STORAGE_BUCKET`: Tu bucket de almacenamiento de Firebase.
+- `FIREBASE_MESSAGING_SENDER_ID`: Tu ID de remitente de mensajería de Firebase.
+- `FIREBASE_APP_ID`: Tu ID de aplicación de Firebase.
+- `FIREBASE_MEASUREMENT_ID`: Tu ID de medición de Firebase.
+- `JWT_SECRET`: Una cadena secreta para firmar los tokens JWT.
+
+## Uso
+
+### Ejecutar en modo desarrollo
 
 ```shell
 pnpm run dev
 ```
 
+### Ejecutar en modo producción
+
+```shell
+# Compilar el proyecto
+pnpm run build
+
+# Iniciar el servidor
+pnpm start
+```
+
 ## Documentación de la API
 
-### Obtener todos los productos
+### Autenticación
+
+Para acceder a las rutas protegidas, primero debes registrar un usuario y luego iniciar sesión para obtener un token de autenticación.
+
+#### Registrar un usuario
+
+- **POST** `/api/register`
+- **Descripción:** Registra un nuevo usuario.
+- **Body (JSON):**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "yourpassword"
+}
+```
+
+- **Respuesta:**
+
+```json
+{
+  "id": "someuserid",
+  "email": "user@example.com"
+}
+```
+
+#### Iniciar sesión
+
+- **POST** `/api/login`
+- **Descripción:** Inicia sesión y devuelve un token JWT.
+- **Body (JSON):**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "yourpassword"
+}
+```
+
+- **Respuesta:**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhSYk94bVhsMkdqVzE3c05WTzkxIiwiZW1haWwiOiJ0ZXN0MkB0ZXN0LmNvbSIsImlhdCI6MTc2MjEyNDkzMCwiZXhwIjoxNzYyMTI4NTMwfQ.dsg7tuUDgZ8IY60co6ySlnu6KnM784qgUWVPrQuygTE"
+}
+```
+
+### Rutas Protegidas
+
+Las siguientes rutas requieren un token JWT en la cabecera `Authorization` como `Bearer token`.
+
+- `POST /api/products`
+- `PUT /api/products/:id`
+- `PATCH /api/products/:id`
+- `DELETE /api/products/:id`
+
+### Productos
+
+#### Obtener todos los productos
 
 - **GET** `/api/products`
 - **Descripción:** Devuelve una lista de todos los productos.
@@ -46,174 +138,74 @@ pnpm run dev
     "image": "https://rec-line.com/img/productos/800x800/ryzen9_7900x.jpeg",
     "name": "AMD Ryzen 9 7900X",
     "price": 450
-  },
-  {
-    "categories": ["GPU", "Gama Alta"],
-    "description": "Tarjeta gráfica para gaming",
-    "id": "xyz789uvw456rst123",
-    "image": "https://rec-line.com/img/productos/800x800/rtx4080.jpeg",
-    "name": "NVIDIA RTX 4080",
-    "price": 1200
-  },
-  {
-    "categories": ["RAM", "Gama Media"],
-    "description": "Memoria RAM DDR5",
-    "id": "mno456pqr789stu012",
-    "image": "https://rec-line.com/img/productos/800x800/ram_ddr5_32gb.jpeg",
-    "name": "Corsair Vengeance 32GB DDR5",
-    "price": 180
   }
 ]
 ```
 
-### Filtrar productos por categorías
+#### Filtrar productos por categorías
 
-- **GET** `/api/products?categories=categories=example`
+- **GET** `/api/products?categories=example`
 - **Descripción:** Devuelve una lista de productos que pertenecen a al menos una de las categorías especificadas.
 - **Parámetros:**
   - `categories` (query, opcional): Una o más categorías por las que filtrar.
 - **Ejemplo de uso:** `/api/products?categories=CPU`
-- **Respuesta de ejemplo:**
 
-```json
-[
-  {
-    "categories": ["CPU", "Gama Alta"],
-    "description": "Procesador de alto rendimiento",
-    "id": "abc123def456ghi789",
-    "image": "https://rec-line.com/img/productos/800x800/ryzen9_7900x.jpeg",
-    "name": "AMD Ryzen 9 7900X",
-    "price": 450
-  },
-  {
-    "categories": ["GPU", "Gama Alta"],
-    "description": "Tarjeta gráfica para gaming",
-    "id": "xyz789uvw456rst123",
-    "image": "https://rec-line.com/img/productos/800x800/rtx4080.jpeg",
-    "name": "NVIDIA RTX 4080",
-    "price": 1200
-  }
-]
-```
-
-### Buscar productos por nombre
+#### Buscar productos por nombre
 
 - **GET** `/api/products/search?name=palabra`
 - **Descripción:** Devuelve los productos cuyo nombre contiene la palabra indicada.
 - **Parámetros:**
   - `name` (query, requerido): texto a buscar en el nombre del producto.
 - **Ejemplo de uso:** `/api/products/search?name=memoria`
-- **Respuesta de ejemplo:**
 
-```json
-[
-  {
-    "categories": ["RAM", "Gama Media"],
-    "description": "Memoria RAM DDR5",
-    "id": "mno456pqr789stu012",
-    "image": "https://rec-line.com/img/productos/800x800/ram_ddr5_32gb.jpeg",
-    "name": "Corsair Vengeance 32GB DDR5",
-    "price": 180
-  }
-]
-```
+#### Obtener producto por ID
 
-### Obtener producto por ID
-
-- **GET** `api/products/:id`
+- **GET** `/api/products/:id`
 - **Descripción:** Devuelve un producto especifico por su ID.
 - **Parámetros:**
   - `id` (path, requerido): ID del producto.
 - **Ejemplo de uso:** `api/products/rAEhiWvFpz8jFDTR9IaP`
-- **Respuesta ejemplo:**
 
-```json
-[
-  {
-    "categories": ["CPU", "Gama Media"],
-    "description": "CPU",
-    "id": "rAEhiWvFpz8jFDTR9IaP",
-    "image": "https://rec-line.com/img/productos/800x800/bx8071514400_2.jpeg",
-    "name": "Intel I5 14400k",
-    "price": 130
-  }
-]
-```
+#### Crear un producto
 
-### Crear un producto
-
-- **POST** `api/products`
-- **Descripción:** Crea un producto nuevo.
+- **POST** `/api/products`
+- **Descripción:** Crea un producto nuevo. (Ruta protegida)
 - **Body (JSON):**
 
 ```json
 {
-        "categories": [
-            "CPU",
-            "Gama Media"
-        ],
-        "description": "CPU",
-        "image": "https://rec-line.com/img/productos/800x800/bx8071514400_2.jpeg",
-        "name": "Intel I5 14400k",
-        "price": 130
-    },
+  "name": "Intel I5 14400k",
+  "price": 130,
+  "description": "CPU",
+  "categories": ["CPU", "Gama Media"],
+  "image": "https://rec-line.com/img/productos/800x800/bx8071514400_2.jpeg"
+}
 ```
 
-- **Respuesta ejemplo:**
-
-```json
-{
-        "categories": [
-            "CPU",
-            "Gama Media"
-        ],
-        "description": "CPU",
-        "id": "rAEhiWvFpz8jFDTR9IaP",
-        "image": "https://rec-line.com/img/productos/800x800/bx8071514400_2.jpeg",
-        "name": "Intel I5 14400k",
-        "price": 130
-    },
-```
-
-### Actualizar un producto
+#### Actualizar un producto
 
 - **PUT** `/api/products/:id`
-- **Descripción:** Actualiza todos los campos de un producto.
+- **Descripción:** Actualiza todos los campos de un producto. (Ruta protegida)
 - **Parámetros:**
   - `id` (path, requerido): ID del producto a actualizar.
-- **Ejemplo de uso:** `api/products/rAEhiWvFpz8jFDTR9IaP`
 - **Body (JSON):**
 
 ```json
 {
-  "categories": ["GPU", "Gama Alta"],
-  "description": "Tarjeta gráfica actualizada",
-  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
   "name": "NVIDIA RTX 4090",
-  "price": 1500
+  "price": 1500,
+  "description": "Tarjeta gráfica actualizada",
+  "categories": ["GPU", "Gama Alta"],
+  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg"
 }
 ```
 
-- **Repuesta Ejemplo:**
-
-```json
-{
-  "categories": ["GPU", "Gama Alta"],
-  "description": "Tarjeta gráfica actualizada",
-  "id": "rAEhiWvFpz8jFDTR9IaP",
-  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
-  "name": "NVIDIA RTX 4090",
-  "price": 1500
-}
-```
-
-### Actualizar un producto parcialmente
+#### Actualizar un producto parcialmente
 
 - **PATCH** `/api/products/:id`
-- **Descripción:** Actualiza solo los campos proporcionados de un producto.
+- **Descripción:** Actualiza solo los campos proporcionados de un producto. (Ruta protegida)
 - **Parámetros:**
   - `id` (path, requerido): ID del producto a actualizar.
-- **Ejemplo de uso:** `/api/products/rAEhiWvFpz8jFDTR9IaP`
 - **Body (JSON):** Solo incluir los campos que quieres actualizar
 
 ```json
@@ -223,24 +215,10 @@ pnpm run dev
 }
 ```
 
-- **Respuesta ejemplo:**
-
-```json
-{
-  "categories": ["GPU", "Gama Alta"],
-  "description": "Tarjeta gráfica en oferta",
-  "id": "rAEhiWvFpz8jFDTR9IaP",
-  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
-  "name": "NVIDIA RTX 4090",
-  "price": 1400
-}
-```
-
-### Eliminar un producto
+#### Eliminar un producto
 
 - **DELETE** `/api/products/:id`
-- **Descripción:** Elimina un producto por su ID.
+- **Descripción:** Elimina un producto por su ID. (Ruta protegida)
 - **Parámetros:**
   - `id` (path, requerido): ID del producto a eliminar
-- **Ejemplo de uso:** `api/products/CKeiE71F2Yj9HIkQD3jh`
 - **Respuesta:** 204 No Content

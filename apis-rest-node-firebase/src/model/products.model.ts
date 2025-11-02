@@ -43,9 +43,41 @@ const getProductById = async (id: string): Promise<Productos | null> => {
   }
 };
 
-// get search
+// get search name
+const getProductByName = async (name: string) => {
+  try {
+    const q = query(productsCollection, where("name", "==", name));
 
-// get producto por categoria
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// get search name_lower
+const getProductByNameLower = async (namelower: string) => {
+  try {
+    const q = query(productsCollection, where("name_lower", "==", namelower));
+
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// get producto por categoria normales
 const getProductsByCategory = async (categories: Array<string>) => {
   try {
     const q = query(
@@ -54,6 +86,30 @@ const getProductsByCategory = async (categories: Array<string>) => {
     );
 
     const snapshot = await getDocs(q);
+
+    console.log(snapshot);
+
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// get producto por categoria_lower
+const getProductsByCategoryLower = async (categories: Array<string>) => {
+  try {
+    const q = query(
+      productsCollection,
+      where("categories_lower", "array-contains", categories),
+    );
+
+    const snapshot = await getDocs(q);
+
+    console.log(snapshot);
 
     return snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -144,7 +200,10 @@ const deleteProduct = async (id: string): Promise<boolean> => {
 const metodosAll = {
   getAllProducts,
   getProductById,
+  getProductByName,
+  getProductByNameLower,
   getProductsByCategory,
+  getProductsByCategoryLower,
   createProduct,
   deleteProduct,
   updateProduct,
