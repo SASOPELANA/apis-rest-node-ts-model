@@ -19,13 +19,13 @@ Apis Rest para gestión de productos desarrollado con Node.js y Express.
 npm install -g pnpm
 ```
 
-3. Instalar dependencias.
+3.Instalar dependencias.
 
 ```shell
 pnpm install
 ```
 
-4. Configurar variables de entorno:
+4.Configurar variables de entorno:
 
 Copia el archivo `example.env` y renombrado a `.env`. Luego, completa los valores requeridos.
 
@@ -127,7 +127,72 @@ Las siguientes rutas requieren un token JWT en la cabecera `Authorization` como 
 
 - **GET** `/api/products`
 - **Descripción:** Devuelve una lista de todos los productos.
-- **Respuesta de ejemplo:**
+- **Parámetros (query):**
+  - `categories` (opcional): Filtra productos por categoría
+- **Ejemplo de uso con filtro:** `/api/products?categories=Consola`
+- **Respuesta de ejemplo con filtro por categoría:**
+
+```json
+[
+  {
+    "categories": ["Consola", "Gamer"],
+    "description": "Consola para jugar todos los generos de juegos actuales.",
+    "id": "WiUEIyalLdDWUORKwxXA",
+    "image": "https://imgs.search.brave.com/WXxQqOq0gILbZ7Z70-Wq3MSCrloUNFms6MFdOleuQpw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wbGF0/Zm9ybS50aGV2ZXJn/ZS5jb20vd3AtY29u/dGVudC91cGxvYWRz/L3NpdGVzLzIvY2hv/cnVzL3VwbG9hZHMv/Y2hvcnVzX2Fzc2V0/L2ZpbGUvMjU2Mzk5/NTEvcHM1X3Byb19z/ZWFuX2hvbGxpc3Rl/cl92ZXJnZV8wMDEu/anBnP3F1YWxpdHk9/OTAmc3RyaXA9YWxs/JmNyb3A9MjEuODcw/MzcwMzcwMzcsMCw1/Ni4yNTkyNTkyNTky/NTksMTAwJnc9MjQw/MA",
+    "name": "PS5 PRO",
+    "price": 600
+  },
+  {
+    "categories": ["Deportes", "Fitness"],
+    "description": "Remera GyM",
+    "id": "xEnD9axJWh4rbodRQ3aa",
+    "image": "https://imgs.search.brave.com/GxMam_DrPh5sZRRwGVYzbg0t_LEXnKzh30epYIWwhTI/rs:fit:860:0:0:0/g:ce/a",
+    "name": "Remera Deportiva",
+    "price": 20
+  },
+  {
+    "categories": ["GyM", "Fitness"],
+    "description": "Ideales para levantamiento de pesas y tus rutinas de ejercicio.",
+    "id": "evy46ZarBavusVwSclXC",
+    "image": "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw30692432/produ",
+    "name": "Guantes Nike Fitness",
+    "price": 4
+  }
+]
+```
+
+### Buscar productos por nombre
+
+- **GET** `/api/products/search`
+- **Descripción:** Busca productos por nombre
+- **Parámetros (query):**
+  - `name` (requerido): Texto a buscar en el nombre del producto
+- **Ejemplo de uso:** `/api/products/search?name=remera deportiva`
+- **Respuesta ejemplo:**
+
+```json
+[
+  {
+    "categories": ["Deportes", "Fitness"],
+    "categories_lower": ["deportes", "fitness"],
+    "description": "Remera GyM",
+    "description_lower": "remera gym",
+    "id": "xEnD9axJWh4rbodRQ3aa",
+    "image": "https://imgs.search.brave.com/GxMam_DrPh5sZRRwGVYzbg0t_LEXnKzh30epYIWwhTI/rs:fit:860:0:0:0/g:ce/a",
+    "name": "Remera Deportiva",
+    "name_lower": "remera deportiva",
+    "price": 20
+  }
+]
+```
+
+#### Filtrar productos por categorías
+
+- **GET** `/api/products?categories=example`
+- **Descripción:** Devuelve una lista de productos que pertenecen a al menos una de las categorías especificadas.
+- **Parámetros:**
+  - `categories` (query, opcional): Una o más categorías por las que filtrar.
+- **Ejemplo de uso:** `/api/products?categories=CPU`
 
 ```json
 [
@@ -142,29 +207,28 @@ Las siguientes rutas requieren un token JWT en la cabecera `Authorization` como 
 ]
 ```
 
-#### Filtrar productos por categorías
-
-- **GET** `/api/products?categories=example`
-- **Descripción:** Devuelve una lista de productos que pertenecen a al menos una de las categorías especificadas.
-- **Parámetros:**
-  - `categories` (query, opcional): Una o más categorías por las que filtrar.
-- **Ejemplo de uso:** `/api/products?categories=CPU`
-
-#### Buscar productos por nombre
-
-- **GET** `/api/products/search?name=palabra`
-- **Descripción:** Devuelve los productos cuyo nombre contiene la palabra indicada.
-- **Parámetros:**
-  - `name` (query, requerido): texto a buscar en el nombre del producto.
-- **Ejemplo de uso:** `/api/products/search?name=memoria`
-
 #### Obtener producto por ID
 
 - **GET** `/api/products/:id`
 - **Descripción:** Devuelve un producto especifico por su ID.
 - **Parámetros:**
   - `id` (path, requerido): ID del producto.
-- **Ejemplo de uso:** `api/products/rAEhiWvFpz8jFDTR9IaP`
+- **Ejemplo de uso:** `api/products/wnET9pH69hTb0lu1SxbD`
+- **Repuesta de ejemplo:**
+
+```json
+ {
+        "categories": [
+            "Celular",
+            "Premium"
+        ],
+        "description": "Smartphone de gama alta con cámara profesional y rendimiento avanzado",
+        "id": "wnET9pH69hTb0lu1SxbD",
+        "image": "https://imgs.search.brave.com/7kyfAnQhn9G9Fjfq5p2ypLfAydi1vXW1Fw3im7tms1I/rs:fit:860:0:0:0/g:ce/a",
+        "name": "Samsung Galaxy S25 Ultra",
+        "price": 1200
+    },
+```
 
 #### Crear un producto
 
