@@ -3,10 +3,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
+import { RequestWithUser, UserTokenPayload } from "../types/types.user.js";
+import { Response, NextFunction } from "express";
 
 export const verifyToken = (
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
@@ -25,7 +26,12 @@ export const verifyToken = (
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, secret);
-    (req as any).user = decoded;
+
+    if (typeof decoded === "string") {
+      return res.status(401).json({ message: "Token no valido" });
+    }
+
+    req.user = decoded as UserTokenPayload;
     next();
   } catch (err) {
     return res.status(401).json({ message: "Token no valido" });

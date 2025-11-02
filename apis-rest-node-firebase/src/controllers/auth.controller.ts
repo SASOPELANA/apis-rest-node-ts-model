@@ -5,11 +5,12 @@ dotenv.config();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail } from "../model/user.model.js";
+import { AuthBody } from "../types/types.user.js";
 
 import { Request, Response } from "express";
 
 export const register = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body as AuthBody;
 
   if (!email || !password) {
     return res
@@ -37,7 +38,7 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body as AuthBody;
 
   if (!email || !password) {
     return res
