@@ -66,6 +66,36 @@ pnpm run dev
 ]
 ```
 
+### Filtrar productos por categorías
+
+- **GET** `/api/products?categories=categories=example`
+- **Descripción:** Devuelve una lista de productos que pertenecen a al menos una de las categorías especificadas.
+- **Parámetros:**
+  - `categories` (query, opcional): Una o más categorías por las que filtrar.
+- **Ejemplo de uso:** `/api/products?categories=CPU`
+- **Respuesta de ejemplo:**
+
+```json
+[
+  {
+    "categories": ["CPU", "Gama Alta"],
+    "description": "Procesador de alto rendimiento",
+    "id": "abc123def456ghi789",
+    "image": "https://rec-line.com/img/productos/800x800/ryzen9_7900x.jpeg",
+    "name": "AMD Ryzen 9 7900X",
+    "price": 450
+  },
+  {
+    "categories": ["GPU", "Gama Alta"],
+    "description": "Tarjeta gráfica para gaming",
+    "id": "xyz789uvw456rst123",
+    "image": "https://rec-line.com/img/productos/800x800/rtx4080.jpeg",
+    "name": "NVIDIA RTX 4080",
+    "price": 1200
+  }
+]
+```
+
 ### Buscar productos por nombre
 
 - **GET** `/api/products/search?name=palabra`
@@ -156,14 +186,11 @@ pnpm run dev
 
 ```json
 {
-    "categories": [
-        "GPU",
-        "Gama Alta"
-    ],
-    "description": "Tarjeta gráfica actualizada",
-    "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
-    "name": "NVIDIA RTX 4090",
-    "price": 1500
+  "categories": ["GPU", "Gama Alta"],
+  "description": "Tarjeta gráfica actualizada",
+  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
+  "name": "NVIDIA RTX 4090",
+  "price": 1500
 }
 ```
 
@@ -171,15 +198,12 @@ pnpm run dev
 
 ```json
 {
-    "categories": [
-        "GPU",
-        "Gama Alta"
-    ],
-    "description": "Tarjeta gráfica actualizada",
-    "id": "rAEhiWvFpz8jFDTR9IaP",
-    "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
-    "name": "NVIDIA RTX 4090",
-    "price": 1500
+  "categories": ["GPU", "Gama Alta"],
+  "description": "Tarjeta gráfica actualizada",
+  "id": "rAEhiWvFpz8jFDTR9IaP",
+  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
+  "name": "NVIDIA RTX 4090",
+  "price": 1500
 }
 ```
 
@@ -194,8 +218,8 @@ pnpm run dev
 
 ```json
 {
-    "price": 1400,
-    "description": "Tarjeta gráfica en oferta"
+  "price": 1400,
+  "description": "Tarjeta gráfica en oferta"
 }
 ```
 
@@ -203,15 +227,12 @@ pnpm run dev
 
 ```json
 {
-    "categories": [
-        "GPU",
-        "Gama Alta"
-    ],
-    "description": "Tarjeta gráfica en oferta",
-    "id": "rAEhiWvFpz8jFDTR9IaP",
-    "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
-    "name": "NVIDIA RTX 4090",
-    "price": 1400
+  "categories": ["GPU", "Gama Alta"],
+  "description": "Tarjeta gráfica en oferta",
+  "id": "rAEhiWvFpz8jFDTR9IaP",
+  "image": "https://rec-line.com/img/productos/800x800/rtx4090.jpeg",
+  "name": "NVIDIA RTX 4090",
+  "price": 1400
 }
 ```
 

@@ -7,6 +7,8 @@ import {
   addDoc,
   setDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { Productos } from "../types/types.products.js";
 
@@ -42,6 +44,26 @@ const getProductById = async (id: string): Promise<Productos | null> => {
 };
 
 // get search
+
+// get producto por categoria
+const getProductsByCategory = async (categories: Array<string>) => {
+  try {
+    const q = query(
+      productsCollection,
+      where("categories", "array-contains", categories),
+    );
+
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 // post --> create new product
 const createProduct = async (data: any): Promise<Productos | null> => {
@@ -122,6 +144,7 @@ const deleteProduct = async (id: string): Promise<boolean> => {
 const metodosAll = {
   getAllProducts,
   getProductById,
+  getProductsByCategory,
   createProduct,
   deleteProduct,
   updateProduct,

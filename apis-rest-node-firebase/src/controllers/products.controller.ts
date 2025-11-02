@@ -1,22 +1,26 @@
 import { Request, Response } from "express";
 import Model from "../model/products.model.js";
 import { Productos } from "../types/types.products.js";
-import { error } from "console";
 
 // get all
 const getAll = async (req: Request, res: Response) => {
-  const categories = req.query.categories as string;
-
-  const response = await Model.getAllProducts();
+  const categories = req.query.categories as string[];
 
   if (categories) {
-    const productsFiltered = response.filter((item) =>
-      item.categories.includes(categories),
-    );
+    const productsByCategory = await Model.getProductsByCategory(categories);
+
+    //console.log(productsByCategory.length);
+
+    if (productsByCategory.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron productos con esa categoría." });
+    }
 
     // nunca se deja dos res en un metodo. si incluye dos o mas se usa return
-    return res.json(productsFiltered);
+    return res.json(productsByCategory);
   }
+  const response = await Model.getAllProducts();
   res.json(response);
 };
 
@@ -29,7 +33,7 @@ const getSearch = (req: Request, res: Response) => {
     return res.status(400).json({ error: "El nombre es requerido" });
   }
 
-  const productsFiltered = response.filter((item) =>
+  const productsByCategory= response.filter((item) =>
     item.name.toLowerCase().includes(name.toLowerCase()),
   );
 
@@ -233,11 +237,9 @@ const updatePatchProduct = async (req: Request, res: Response) => {
 
   if (req.body.image !== undefined) {
     if (req.body.image.trim().length === 0) {
-      return res
-        .status(400)
-        .json({
-          error: "La URL de la imagen debe ser un texto y no estar vacia.",
-        });
+      return res.status(400).json({
+        error: "La URL de la imagen debe ser un texto y no estar vacia.",
+      });
     }
 
     data.image = req.body.image;
