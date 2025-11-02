@@ -20,12 +20,12 @@ router.get("/products/:id", controller.getId);
 router.post("/products", verifyToken, controller.createProduct);
 
 // put --> update product
-router.put("/products/:id", controller.updateProduct);
+router.put("/products/:id", verifyToken, controller.updateProduct);
 
 // patch --> update product --> partial update
-router.patch("/products/:id", controller.updatePatchProduct);
+router.patch("/products/:id", verifyToken, controller.updatePatchProduct);
 
 // delete --> delete product
-router.delete("/products/:id", controller.deleteProduct);
+router.delete("/products/:id", verifyToken, controller.deleteProduct);
 
 export default router;
